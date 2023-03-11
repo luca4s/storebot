@@ -24,6 +24,8 @@ async def on_ready():
 async def on_message(message):
     if message.author == bot.user:
         return
+    elif not message.guild and message.author.id == 1052328074399719585 and not message.content == None:
+        await bot.get_channel(1067642931185463467).send(message.content)
     
     msg = message.content.lower()
     if re.findall(".*loja.*aberta|fechada.*", msg) and msg.endswith("?"):
@@ -38,7 +40,7 @@ async def on_message(message):
     elif re.findall(".*como.*compra.*", msg) or re.findall(".*como.*abre.*ticket.*", msg):
         comocomprar = 1067904352292970606
         await message.reply(f"Verifique o <#{comocomprar}>.")
-    elif re.findall(".*que.*hora.*abre|fecha|atende.*", msg):
+    elif re.findall(".*que.*hora.*abre.*", msg):
         ticket = 1067933165605372036
         await message.reply(f"Nós normalmente abrimos o <#{ticket}> das 17:00 as 22:30.")
     elif (re.findall("vendo|vendendo", msg) or (re.findall("troco|lf|procuro|procurando", msg) and re.findall(" pix | p1x | robux ", msg))) and message.channel.id == 1068366008517140500:
@@ -63,10 +65,15 @@ async def pix(interaction: discord.Interaction):
     await interaction.response.send_message("841a1001-12ec-46ae-8358-327595617102", embed=embed)
 
 @bot.tree.command(name="cliente", description="Dá o cargo de cliente para alguém.")
-async def pix(interaction: discord.Interaction):
+@app_commands.describe(user = "Usuário")
+async def pix(interaction: discord.Interaction, user: str):
     roles = [1071267815316803694]
     if roles.count(interaction.user.top_role.id):
-        await interaction.response.send_message("ainda to fazendo calmai kkj", ephemeral=True)
+        user_id = user[2:len(user)-1]
+        guild = bot.get_guild(1067626063410253874)
+        cliente = guild.get_role(1067999699367374878)
+        guild.get_member(user_id).add_roles(cliente)
+        await interaction.response.send_message("Pronto!", ephemeral=True)
     else:
         await interaction.response.send_message(":x: | Você não tem permissão de fazer isso!", ephemeral=True)
 
