@@ -45,18 +45,24 @@ async def on_message(message):
         else:
             response = f"Atualmente a loja está fechada, mas verifique o <#{comocomprar}>."
         await message.reply(response)
-    elif (re.findall("vendo|vendendo", msg) or (re.findall("troco|lf|procuro|procurando", msg) and re.findall("pix|robux", msg))) and message.channel.id == 1068366008517140500:
+    elif (re.findall("vendo|vendendo", msg) or (re.findall("troco|lf|procuro|procurando", msg) and re.findall("pix|p1x|robux", msg))) and message.channel.id == 1068366008517140500:
         roles = [1069360991055388683, 1079960179774341170, 1067999699367374878, 1069163179638259733]
         if roles.count(message.author.top_role.id):
             embed = discord.Embed(title="Possível venda detectada.", description=f"{message.content} ([Vá para a mensagem]({message.jump_url}))", color=0x990000)
             embed.set_author(name=message.author, icon_url=message.author.avatar.url)
             embed.set_footer(text=f"ID Mensagem: {message.id}\nID Remetente: {message.author.id}")
             await bot.get_channel(1071578248930131998).send("<@&1071267815316803694> <@&1068396717705273384>", embed=embed)
+    elif len(re.findall("<@843250104437571614>|x|<@1052328074399719585>", msg)) == 3:
+        await message.reply("dois gay q eu amo mt :heart_eyes:")
+
+@bot.tree.command(name="server", description="Mostra o link do servidor privado.")
+async def server(interaction: discord.Interaction):
+    await interaction.response.send_message("https://www.roblox.com/games/142823291?privateServerLinkCode=71053601020321642732428738897954")
 
 @bot.tree.command(name="pix", description="Mostra o QR code do PIX para pagamento.")
 async def pix(interaction: discord.Interaction):
-    embed = discord.Embed(title="QR Code - PIX", description="Ou use a chave aleatória:\n`841a1001-12ec-46ae-8358-327595617102`", color=0xE52D2D)
+    embed = discord.Embed(title="QR Code - PIX", description="Ou use a chave aleatória inserida no conteúdo da mensagem.", color=0xE52D2D)
     embed.set_image(url="https://fsmm2.github.io/images/QR.png")
-    await interaction.response.send_message(embed=embed)
+    await interaction.response.send_message("841a1001-12ec-46ae-8358-327595617102", embed=embed)
 
 bot.run(os.getenv("TOKEN"))
