@@ -52,8 +52,9 @@ async def on_message(message):
             embed.set_author(name=message.author, icon_url=message.author.avatar.url)
             embed.set_footer(text=f"ID Mensagem: {message.id}\nID Remetente: {message.author.id}")
             await bot.get_channel(1071578248930131998).send("<@&1071267815316803694> <@&1068396717705273384>", embed=embed)
-    elif len(re.findall("<@843250104437571614>|x|<@1052328074399719585>", msg)) == 3:
+    elif msg == "<@843250104437571614> x <@1052328074399719585>" or msg == "<@1052328074399719585> x <@843250104437571614>":
         await message.reply("dois gay q eu amo mt :heart_eyes:")
+        # oi madu :)
 
 @bot.tree.command(name="server", description="Mostra o link do servidor privado.")
 async def server(interaction: discord.Interaction):
