@@ -67,7 +67,7 @@ async def pix(interaction: discord.Interaction):
     roles = [1071267815316803694]
     if roles.count(interaction.user.top_role.id):
         await interaction.response.send_message("ainda to fazendo calmai kkj", ephemeral=True)
-    if roles.count(interaction.user.top_role.id):
+    else:
         await interaction.response.send_message(":x: | Você não tem permissão de fazer isso!", ephemeral=True)
 
 bot.run(os.getenv("TOKEN"))
