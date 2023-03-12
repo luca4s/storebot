@@ -66,14 +66,14 @@ async def pix(interaction: discord.Interaction):
 
 @bot.tree.command(name="cliente", description="Dá o cargo de cliente para alguém.")
 @app_commands.describe(user = "Usuário")
-async def pix(interaction: discord.Interaction, user: str):
-    roles = [1071267815316803694]
+async def cliente(interaction: discord.Interaction, user: discord.Member):
+    roles = [1082368752512933978, 1071267815316803694, 1068721364892139541, 1068396717705273384, 1075148178543890582, 1067999262266376272, 1069723376756719697]
     if roles.count(interaction.user.top_role.id):
-        user_id = user[2:len(user)-1]
-        guild = bot.get_guild(1067626063410253874)
-        cliente = guild.get_role(1067999699367374878)
-        guild.get_member(user_id).add_roles(cliente)
-        await interaction.response.send_message("Pronto!", ephemeral=True)
+        await interaction.response.send_message("madu se vc estiver lendo isso, bota o cargo do bot acima do @Clientes pra esse comando funcionar (ja programei, mas n funciona pq o bot ta abaixo de clientes)", ephemeral=True)
+        # guild = bot.get_guild(1067626063410253874)
+        # cliente = guild.get_role(1067999699367374878) 
+        # await user.add_roles(cliente)
+        # await interaction.response.send_message("Pronto!", ephemeral=True)
     else:
         await interaction.response.send_message(":x: | Você não tem permissão de fazer isso!", ephemeral=True)
 
