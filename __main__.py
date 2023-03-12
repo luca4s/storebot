@@ -28,7 +28,7 @@ async def on_message(message):
         await bot.get_channel(1067642931185463467).send(message.content)
     
     msg = message.content.lower()
-    if re.findall(".*loja.*aberta|fechada.*", msg) and msg.endswith("?"):
+    if re.findall(".*loja.*aberta.*", msg) or re.findall(".*loja.*fechada.*", msg) and msg.endswith("?"):
         ticket = 1067933165605372036
         lojaaberta = LojaAberta()
         response = ""
