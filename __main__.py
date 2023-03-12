@@ -74,7 +74,7 @@ async def cliente(interaction: discord.Interaction, user: discord.Member):
             cliente = guild.get_role(1067999699367374878)
             if guild.get_member(bot.user.id).top_role.position > cliente.position:
                 await user.add_roles(cliente)
-                await interaction.response.send_message("Pronto!", ephemeral=True)
+                await interaction.response.send_message(":white_check_mark: | Pronto!", ephemeral=True)
             else:
                 await interaction.response.send_message(":warning: | O bot não tem a permissão de dar este cargo!", ephemeral=True)
         else:
