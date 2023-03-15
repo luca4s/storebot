@@ -1,10 +1,10 @@
-import discord, os, re
-from discord import ui, app_commands
+import discord, os, re, requests, emoji
+from discord import app_commands
 from discord.ext import commands
 from dotenv import load_dotenv
 
 load_dotenv()
-bot = commands.Bot(command_prefix="!", intents=discord.Intents.all())
+bot = commands.Bot(command_prefix="/", intents=discord.Intents.all())
 
 def LojaAberta():
     ticket = 1067933165605372036
@@ -27,32 +27,46 @@ async def on_message(message):
     elif not message.guild and message.author.id == 1052328074399719585 and not message.content == None:
         await bot.get_channel(1067642931185463467).send(message.content)
     
-    msg = message.content.lower()
-    if re.findall(".*loja.*aberta.*", msg) or re.findall(".*loja.*fechada.*", msg) and msg.endswith("?"):
-        ticket = 1067933165605372036
-        lojaaberta = LojaAberta()
-        response = ""
-        if lojaaberta != False:
-            response = f"A loja está aberta! Vá em <#{ticket}> para fazer um pedido!"
-        else:
-            response = f"A loja infelizmente está fechada."
-        await message.reply(response)
-    elif re.findall(".*como.*compra.*", msg) or re.findall(".*como.*abre.*ticket.*", msg):
-        comocomprar = 1067904352292970606
-        await message.reply(f"Verifique o <#{comocomprar}>.")
-    elif re.findall(".*que.*hora.*abre.*", msg) or re.findall(".*quando.*abre.*", msg) or re.findall(".*loja.*abre.*", msg):
-        ticket = 1067933165605372036
-        await message.reply(f"Nós normalmente abrimos o <#{ticket}> das 17:00 as 22:30.")
-    elif (re.findall("vendo|vendendo", msg) or (re.findall("troco|lf|procuro|procurando", msg) and re.findall(" pix| p1x | robux ", msg))) and message.channel.id == 1068366008517140500:
-        roles = [1069360991055388683, 1079960179774341170, 1067999699367374878, 1069163179638259733]
-        if roles.count(message.author.top_role.id):
-            embed = discord.Embed(title="Possível venda detectada.", description=f"{message.content} ([Vá para a mensagem]({message.jump_url}))", color=0x990000)
-            embed.set_author(name=message.author, icon_url=message.author.avatar.url)
-            embed.set_footer(text=f"ID Mensagem: {message.id}\nID Remetente: {message.author.id}")
-            await bot.get_channel(1071578248930131998).send("<@&1071267815316803694> <@&1068396717705273384>", embed=embed)
-    elif msg == "<@1052666107451949137> x <@1052328074399719585>" or msg == "<@1052328074399719585> x <@1052666107451949137>":
-        await message.reply("dois gay q eu amo mt :heart_eyes:")
-        # https://docs.google.com/document/d/1qy_wclat0mKZen2NuGWqw6EIMgOJkmsWJrHtbDMxv5k/edit?usp=sharing
+    logchannels = [1067938728292651098, 1067905559203958835]
+    if logchannels.count(message.channel.id):
+        provas = bot.get_channel(1067938728292651098)
+        avaliacoes = bot.get_channel(1067905559203958835)
+        data = {'provas':[],'avaliacoes':[]}
+        async for prova in provas.history(limit=10):
+            if prova.attachments[0]:
+                data['provas'].append(prova.attachments[0].url)
+        async for avaliacao in avaliacoes.history(limit=10):
+            if avaliacao.author.avatar:
+                data['avaliacoes'].append({'content':emoji.emojize(avaliacao.content),'avatar':avaliacao.author.avatar.url,'name':avaliacao.author.display_name})
+            else:
+                data['avaliacoes'].append({'content':emoji.emojize(avaliacao.content),'avatar':'','name':avaliacao.author.display_name})
+        response = requests.post("https://fsmm2.herokuapp.com/post", data=str(data), json=data)
+        print(response)
+        print(data)
+    else:
+        msg = message.content.lower()
+        if (re.findall(".*loja.*aberta.*", msg) or re.findall(".*loja.*fechada.*", msg)) and msg.endswith("?"):
+            ticket = 1067933165605372036
+            lojaaberta = LojaAberta()
+            response = ""
+            if lojaaberta != False:
+                response = f"A loja está aberta! Vá em <#{ticket}> para fazer um pedido!"
+            else:
+                response = f"A loja infelizmente está fechada."
+            await message.reply(response)
+        elif (re.findall(".*como.*compra.*", msg) or re.findall(".*como.*abre.*ticket.*", msg)) and not re.findall(".*robux.*", msg):
+            comocomprar = 1067904352292970606
+            await message.reply(f"Verifique o <#{comocomprar}>.")
+        elif re.findall(".*q.*hora.*abr.*", msg) or re.findall(".*quando.*abr.*", msg) or re.findall(".*loja.*abr.*quando.*", msg):
+            ticket = 1067933165605372036
+            await message.reply(f"Nos dias que iremos abrir, nós **__normalmente__** abrimos o <#{ticket}> das 19:00 as 22:00. ")
+        elif (re.findall("vendo|vendendo", msg) or (re.findall("troco|lf|procuro|procurando", msg) and re.findall(" pix| p1x | robux ", msg))) and message.channel.id == 1068366008517140500:
+            roles = [1069360991055388683, 1079960179774341170, 1067999699367374878, 1069163179638259733]
+            if roles.count(message.author.top_role.id):
+                embed = discord.Embed(title="Possível venda detectada.", description=f"{message.content} ([Vá para a mensagem]({message.jump_url}))", color=0x990000)
+                embed.set_author(name=message.author, icon_url=message.author.avatar.url)
+                embed.set_footer(text=f"ID Mensagem: {message.id}\nID Remetente: {message.author.id}")
+                await bot.get_channel(1071578248930131998).send("<@&1071267815316803694> <@&1068396717705273384>", embed=embed)
 
 @bot.tree.command(name="server", description="Mostra o link do servidor privado.")
 async def server(interaction: discord.Interaction):
