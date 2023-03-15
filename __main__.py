@@ -39,10 +39,8 @@ async def on_message(message):
             if avaliacao.author.avatar:
                 data['avaliacoes'].append({'content':emoji.emojize(avaliacao.content),'avatar':avaliacao.author.avatar.url,'name':avaliacao.author.display_name})
             else:
-                data['avaliacoes'].append({'content':emoji.emojize(avaliacao.content),'avatar':'','name':avaliacao.author.display_name})
-        response = requests.post("https://fsmm2.herokuapp.com/post", data=str(data), json=data)
-        print(response)
-        print(data)
+                data['avaliacoes'].append({'content':emoji.emojize(avaliacao.content),'avatar':None,'name':avaliacao.author.display_name})
+        requests.post("https://fsmm2.herokuapp.com/post", json=data)
     else:
         msg = message.content.lower()
         if (re.findall(".*loja.*aberta.*", msg) or re.findall(".*loja.*fechada.*", msg)) and msg.endswith("?"):
