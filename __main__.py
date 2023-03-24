@@ -40,7 +40,7 @@ async def on_message(message):
                 data['avaliacoes'].append({'content':emoji.emojize(avaliacao.content),'avatar':avaliacao.author.avatar.url,'name':avaliacao.author.display_name})
             else:
                 data['avaliacoes'].append({'content':emoji.emojize(avaliacao.content),'avatar':None,'name':avaliacao.author.display_name})
-        requests.post("https://fsmm2.herokuapp.com/post", json=data)
+        requests.post("https://sleepylucapis.herokuapp.com/fsapi", json=data)
     else:
         msg = message.content.lower()
         if (re.findall(".*loja.*aberta.*", msg) or re.findall(".*loja.*fechada.*", msg)) and msg.endswith("?"):
@@ -57,7 +57,7 @@ async def on_message(message):
             await message.reply(f"Verifique o <#{comocomprar}>.")
         elif re.findall(".*q.*hora.*abr.*", msg) or re.findall(".*quando.*abr.*", msg) or re.findall(".*loja.*abr.*quando.*", msg):
             ticket = 1067933165605372036
-            await message.reply(f"Nos dias que iremos abrir, nós **__normalmente__** abrimos o <#{ticket}> das 19:00 as 22:00. ")
+            await message.reply(f"Não temos horário fixo.")
         elif (re.findall("vendo|vendendo", msg) or (re.findall("troco|lf|procuro|procurando", msg) and re.findall(" pix| p1x | robux ", msg))) and message.channel.id == 1068366008517140500:
             roles = [1069360991055388683, 1079960179774341170, 1067999699367374878, 1069163179638259733]
             if roles.count(message.author.top_role.id):
