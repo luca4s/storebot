@@ -7,8 +7,8 @@ load_dotenv()
 bot = commands.Bot(command_prefix="/", intents=discord.Intents.all())
 
 def LojaAberta():
-    ticket = 1067933165605372036
-    guild = bot.get_guild(1067626063410253874)
+    ticket = 0
+    guild = bot.get_guild(0)
     return bot.get_channel(ticket).permissions_for(guild.default_role).view_channel
 
 @bot.event
@@ -24,13 +24,11 @@ async def on_ready():
 async def on_message(message):
     if message.author == bot.user:
         return
-    elif not message.guild and message.author.id == 1052328074399719585 and not message.content == None:
-        await bot.get_channel(1067642931185463467).send(message.content)
     
-    logchannels = [1067938728292651098, 1067905559203958835]
+    logchannels = [0]
     if logchannels.count(message.channel.id):
-        provas = bot.get_channel(1067938728292651098)
-        avaliacoes = bot.get_channel(1067905559203958835)
+        provas = bot.get_channel(0)
+        avaliacoes = bot.get_channel(0)
         data = {'provas':[],'avaliacoes':[]}
         async for prova in provas.history(limit=10):
             if prova.attachments[0]:
@@ -40,11 +38,11 @@ async def on_message(message):
                 data['avaliacoes'].append({'content':emoji.emojize(avaliacao.content),'avatar':avaliacao.author.avatar.url,'name':avaliacao.author.display_name})
             else:
                 data['avaliacoes'].append({'content':emoji.emojize(avaliacao.content),'avatar':None,'name':avaliacao.author.display_name})
-        requests.post("https://sleepylucapis.herokuapp.com/fsapi", json=data)
+        requests.post("insira sua api", json=data)
     else:
         msg = message.content.lower()
         if (re.findall(".*loja.*aberta.*", msg) or re.findall(".*loja.*fechada.*", msg)) and msg.endswith("?"):
-            ticket = 1067933165605372036
+            ticket = 0
             lojaaberta = LojaAberta()
             response = ""
             if lojaaberta != False:
@@ -53,33 +51,33 @@ async def on_message(message):
                 response = f"A loja infelizmente está fechada."
             await message.reply(response)
         elif (re.findall(".*como.*compra.*", msg) or re.findall(".*como.*abre.*ticket.*", msg)) and not re.findall(".*robux.*", msg):
-            comocomprar = 1067904352292970606
+            comocomprar = 0
             await message.reply(f"Verifique o <#{comocomprar}>.")
         elif re.findall(".*q.*hora.*abr.*", msg) or re.findall(".*quando.*abr.*", msg) or re.findall(".*loja.*abr.*quando.*", msg):
-            ticket = 1067933165605372036
+            ticket = 0
             await message.reply(f"Não temos horário fixo.")
         elif (re.findall("vendo|vendendo", msg) or (re.findall("troco|lf|procuro|procurando", msg) and re.findall(" pix| p1x | robux ", msg))) and message.channel.id == 1068366008517140500:
-            roles = [1069360991055388683, 1079960179774341170, 1067999699367374878, 1069163179638259733]
+            roles = [0]
             if roles.count(message.author.top_role.id):
                 embed = discord.Embed(title="Possível venda detectada.", description=f"{message.content} ([Vá para a mensagem]({message.jump_url}))", color=0x990000)
                 embed.set_author(name=message.author, icon_url=message.author.avatar.url)
                 embed.set_footer(text=f"ID Mensagem: {message.id}\nID Remetente: {message.author.id}")
-                await bot.get_channel(1071578248930131998).send("<@&1071267815316803694> <@&1068396717705273384>", embed=embed)
+                await bot.get_channel(1071578248930131998).send("<@&0>", embed=embed)
 
 @bot.tree.command(name="server", description="Mostra o link do servidor privado.")
 async def server(interaction: discord.Interaction):
-    await interaction.response.send_message("https://www.roblox.com/games/142823291?privateServerLinkCode=71053601020321642732428738897954")
+    await interaction.response.send_message("0")
 
 @bot.tree.command(name="pix", description="Mostra o QR code do PIX para pagamento.")
 async def pix(interaction: discord.Interaction):
     embed = discord.Embed(title="QR Code - PIX", description="Ou use a chave aleatória inserida no conteúdo da mensagem.", color=0xE52D2D)
-    embed.set_image(url="https://fsmm2.github.io/images/QR.png")
-    await interaction.response.send_message("841a1001-12ec-46ae-8358-327595617102", embed=embed)
+    embed.set_image(url="insira imagem")
+    await interaction.response.send_message("insira chave pix", embed=embed)
 
 @bot.tree.command(name="cliente", description="Dá o cargo de cliente para alguém.")
 @app_commands.describe(user = "Usuário")
 async def cliente(interaction: discord.Interaction, user: discord.Member):
-    roles = [1082368752512933978, 1071267815316803694, 1068721364892139541, 1068396717705273384, 1075148178543890582, 1067999262266376272, 1069723376756719697]
+    roles = [0]
     if roles.count(interaction.user.top_role.id):
         if user:
             guild = bot.get_guild(1067626063410253874)
